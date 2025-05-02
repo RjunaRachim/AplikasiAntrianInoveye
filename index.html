@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Panggil Antrian</title>
+    <link rel="icon" href="src/img/favicon.png">
+    <link href="bootstrap/css/bootstrap.css" rel="stylesheet">
+    <style>
+      body {
+        background-color: rgb(190, 190, 190)1;
+
+      }
+
+      html, body {
+        height: 100%;
+        margin: 0;
+        overflow: hidden;
+      }
+
+      .container-fluid {
+        height: 100%;
+      }
+
+      .navbar {
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+      }
+
+      .footer {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+      }
+
+
+    </style>
+  </head>
+  <body class="vh-100">
+    <nav class="navbar navbar-expand-lg" style="background-color: #0f838c;">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">
+          <img src="src/img/inovnav.png" style="width: 200px;">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+          <div class="navbar-nav">
+            <a class="nav-link" href="panggil-antrian/index.php">Dashboard</a>
+            <a class="nav-link" href="ambil-antrian/index.php">Antrian</a>
+            <a class="nav-link" href="monitor-display/index.php">Display</a>
+            <a class="nav-link" href="pengaturan/index.html">Pengaturan</a>
+          </div>
+        </div>
+        <div class="navbar-text">
+            <span class="fs-4 text-white" id="tanggal"></span>
+          </div>
+      </div>
+    </nav>
+
+    <div class="container-fluid h-100 border">
+      <div class="row" style="height: 500px;">
+        <div class="col-md-6 offset-md-3 my-auto">
+          <h1 class="text-center">Selamat Datang</h1>
+        </div>
+      </div>
+    </div>
+
+    <footer class="bg-white fixed-bottom text-center p-2 footer">
+      <div class="container">
+        <div class="copyright text-center mb-2 mb-md-0">
+          &copy; 2023 - Rjuna. All rights reserved.
+        </div>
+      </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.js"></script>
+    <script src="bootstrap/js/bootstrap.bundle.js"></script>
+    <script>
+        function updateTanggal() {
+        var sekarang = new Date();
+
+        var options = { weekday: 'long', day: 'numeric', month: 'short', year: 'numeric', hour: 'numeric', minute: 'numeric', hour12: false };
+        var formatter = new Intl.DateTimeFormat('id-ID', options);
+        var tanggalString = formatter.format(sekarang);
+
+        document.getElementById("tanggal").innerHTML = tanggalString;
+        }
+
+        
+        // Update setiap detik
+        setInterval(updateTanggal, 1000);
+        
+        // Panggil untuk pertama kali
+        updateTanggal();
+    </script>
+
+  </body>
+</html>

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pengaturan</title>
+    <link rel="icon" href="../src/img/favicon.png">
+    <link href="../bootstrap/css/bootstrap.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: rgb(190, 190, 190)1;
+        }
+
+        .footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg" style="background-color: #0f838c;">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <img src="../src/img/inovnav.png" style="width: 200px;">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                    <a class="nav-link" href="../panggil-antrian/index.php">Dashboard</a>
+                    <a class="nav-link" href="../ambil-antrian/index.php">Antrian</a>
+                    <a class="nav-link" href="../monitor-display/index.php">Display</a>
+                    <a class="nav-link active text-white" aria-current="page" href="../pengaturan/index.html">Pengaturan</a>
+                </div>
+            </div>
+            <div class="navbar-text">
+                <span class="fs-4 text-white" id="tanggal"></span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid w-75 my-5">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <div class="fs-5 fw-bold">Backup</div>
+                <div class="fs-6">Backup semua antrian</div>
+            </div>
+            <a href="../panggil-antrian/backup.html">
+                <button type="button" class="btn btn-primary">Backup</button>
+            </a>
+        </div>
+        <hr>
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <div class="fs-5 fw-bold">Reset LCD <button type="button" class="btn btn-outline-secondary" disabled>Belum Tersedia</button>
+                </div>
+                <div class="fs-6">Fungsi untuk mereset nomor antrian pada LCD Monitor</div>
+            </div>
+            <button type="button" class="btn btn-danger" id="resetLcd">Reset</button>
+        </div>
+        <hr>
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <div class="fs-5 fw-bold">Reset Antrian</div>
+                <div class="fs-6">Fungsi untuk mereset nomor antrian dan mengulang antrian dari awal</div>
+            </div>
+            <button type="button" class="btn btn-danger" id="resetAntrian">Reset</button>
+        </div>
+        <hr>
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <div class="fs-5 fw-bold">Running Text</div>
+                <div class="fs-6">Pengaturan fungsi Running Text pada LCD Monitor</div>
+            </div>
+            <a href="../pengaturan/running_text.php">
+                <button type="button" class="btn btn-primary">Atur</button>
+            </a>
+        </div>
+        <hr>
+    </div>
+
+    <!-- MODAL KONFIRMASI RESET ANTRIAN -->
+    <div class="modal fade" id="resetAntrianModal" tabindex="-1" aria-labelledby="resetAntrianModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="resetAntrianModalLabel">Reset Antrian</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Apakah Anda yakin ingin mereset antrian? Tindakan ini akan menghapus <b>semua</b> antrian hari ini.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-danger" id="confirmResetButton">Reset</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-white fixed-bottom text-center p-2 footer">
+        <div class="container">
+            <div class="copyright text-center mb-2 mb-md-0">
+                &copy; 2023 - Rjuna. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <script src="../bootstrap/js/jquery-3.7.1.min.js"></script>
+    <script src="../bootstrap/js/bootstrap.bundle.js"></script>
+    
+    <script>
+        function updateTanggal() {
+            var sekarang = new Date();
+
+            var options = { weekday: 'long', day: 'numeric', month: 'short', year: 'numeric', hour: 'numeric', minute: 'numeric', hour12: false };
+            var formatter = new Intl.DateTimeFormat('id-ID', options);
+            var tanggalString = formatter.format(sekarang);
+
+            document.getElementById("tanggal").innerHTML = tanggalString;
+        }
+
+        setInterval(updateTanggal, 1000);
+
+        updateTanggal();
+
+        document.getElementById('resetAntrian').addEventListener('click', function() {
+            // Tampilkan modal konfirmasi
+            var modal = new bootstrap.Modal(document.getElementById('resetAntrianModal'));
+            modal.show();
+        });
+
+        document.getElementById('confirmResetButton').addEventListener('click', function() {
+            hapusSemuaAntrian();
+
+            location.reload();
+        });
+
+        function hapusSemuaAntrian() {
+            $.ajax({
+                type: 'POST',
+                url: 'hapus_semua_antrian.php', 
+                success: function(response) {
+                    console.log('Semua antrian berhasil dihapus');
+                },
+                error: function(error) {
+                    console.error('Gagal menghapus antrian:', error);
+                }
+            });
+        }
+    </script>
+
+</body>
+</html>
